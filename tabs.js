@@ -1,6 +1,21 @@
 function setTabs() {
 
-ge.getTab("dots.js").display = function() {
+ge.getTab("toms-acc-cb.scd").tick = function(s) {
+    // console.log("Tick!");
+    ge.clearCanvas();
+    let xp = 40;
+    let yp = this.scroll.y * 9;
+    let x = parseInt(s.substring(0,2)) * xp;
+    // console.log(x);
+    for (let i = 0; i < 16; i++) {
+        let x = i * xp;
+        paintStatic("toms-acc-cb.scd", 80 + x, 10 + yp, types[1][8], horizontal1);
+    }
+        paintStatic("toms-acc-cb.scd", 80 + x, 10 + yp, types[1][8], full);
+};
+
+    
+    ge.getTab("dots.js").display = function() {
     bindFrameBuffer(texture, framebuf);
     gl.viewport(0, 0, cnvs.width, cnvs.height);
     gl.clear(gl.COLOR_BUFFER_BIT);

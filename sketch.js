@@ -464,7 +464,7 @@ receiveOSC = function(s) {
 };
 
 trigger = function(s) {
-    // console.log(s);
+    console.log(s);
 };
 
 socket.off('receiveOSC', receiveOSC);
