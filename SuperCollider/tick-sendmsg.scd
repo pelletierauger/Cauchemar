@@ -23,8 +23,8 @@ SynthDef.new(\tick, {
 ~msg = "000000";
 6.asString.padLeft(2, "0")
 (
-var stepIndex = Pseq((0..15), inf).asStream;
 ~ticking = {
+var stepIndex = Pseq((0..15), inf).asStream;
     ~ticks.stop;
     ~ticks = Pbind(
         \instrument, \tick,
