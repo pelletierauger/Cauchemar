@@ -18,10 +18,8 @@ SynthDef.new(\tick, {
 ~toOSC.sendMsg("/eval", s);
 ~toOSC.sendMsg("/chunk", "00000001");
 
-~a = 12;
-~msg = ["00", "00", "00"];
 ~msg = "000000";
-6.asString.padLeft(2, "0")
+
 (
 ~ticking = {
 var stepIndex = Pseq((0..15), inf).asStream;

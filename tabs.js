@@ -9,9 +9,9 @@ ge.getTab("toms-acc-cb.scd").tick = function(s) {
     // console.log(x);
     for (let i = 0; i < 16; i++) {
         let x = i * xp;
-        paintStatic("toms-acc-cb.scd", 80 + x, 10 + yp, types[1][8], horizontal1);
+        paintStatic(this.name, 80 + x, 10 + yp, types[1][8], horizontal1);
     }
-        paintStatic("toms-acc-cb.scd", 80 + x, 10 + yp, types[1][8], full);
+        paintStatic(this.name, 80 + x, 10 + yp, types[1][8], full);
 };
 
     

@@ -109,7 +109,7 @@ s.stopRecording
         var trig2 = t + DelayN.kr(t, 0.5, ~nT.beatDur / 8);
         var pat0 = [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0];
         var pat1 = [0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-        var pat2 = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ++ (0!16);
+        var pat2 = (0!16) ++ [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         var block0 = Demand.kr(trig, 0, Dseq(pat0, inf));
         var block1 = Demand.kr(trig, 0, Dseq(pat1, inf));
         var block2 = Demand.kr(trig2, 0, Dseq(pat2, inf));
@@ -123,8 +123,8 @@ s.stopRecording
             timbre: [1, 1, 1, 1],
             morph: 0.75 - [0, 0.2, 0, -0.2],
             trigger: (trig!3)++(trig2!1) * [block0, block1, block1, block2] * trigGate,
-            decay: [0.9, 0.6, 0.6, 0.9] * 0.5,
-            lpg_colour: [0.75, 0.75, 0.75, 1],
+            decay: [0.9, 0.6, 0.6, 2] * 0.5,
+            lpg_colour: [0.75, 0.75, 0.75, 0],
             // fm_mod: -0.5,
             // timb_mod: 0.5
             morph_mod: -1

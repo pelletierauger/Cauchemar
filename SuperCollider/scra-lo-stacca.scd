@@ -1,18 +1,18 @@
 (
-~nT.sched(~nT.timeToNextBeat(quant: 4) - (~nT.beatDur * 0.75), {
+~nT.sched(~nT.timeToNextBeat(quant: 4) - (~nT.beatDur * 0.25), {
     ~scraLo.set(\trigGate, 0, \gate, 0, \fadeTime, 0.1);
     ~scraLo = {
         | trigGate = 1 |
         var tr = In.kr(~cb, 2) * trigGate;
         var dd = Demand.kr(tr[0], 0, Dseq([1])); // This opens up the triggers.
-        var t = tr[1] * dd * Demand.kr(tr[1], 0, Dseq([1] ++ (0!32),inf));
+        var t = tr[1] * dd * Demand.kr(tr[1], 0, Dseq([1] ++ (0!31),inf));
         var env = EnvGen.kr(Env([0, 1, 0], [0.001, 0.125 * 0.5], [2, -8, 'lin']), t);
         var env2 = EnvGen.kr(Env([0, 1, 0], [0.001, 0.25 * 1], [2, -8, 'lin']), t);
         var d = Demand.kr(t, 0, Dseq([4, 4, 4, 5, 3, 3, 3, 2].stutter(1) - 0, inf));
         var note = Demand.kr(t, 0, Dseq(
             [0, 0, 0, 1, 3, 3, 3, 5, 0, 0, 0, 1, -1, -1, -1, -2].stutter(4), inf));
         var sig = MiBraids.ar(
-            pitch: 27 + 24 + 0 + [0, 0.5] + 0 + note,
+            pitch: 27 + 24 + [0, 0.5],
             timbre: 0.5 + [0.0, 0.1],
             color: 0.5 + (note * 0.2),
             model: 28,
@@ -43,15 +43,15 @@
             Demand.kr(t, 0, Dseq([-0.5, 0.5].stutter(1).lag(1), inf))
         ) * 8;*/
         sig = MiRings.ar(sig!2,
-            pit: 27+0+note.lag(1), struct: 0.25, bright: 0.125,
+            pit: 27, struct: 0.25, bright: 0.125,
             damp: 0.2, pos: 0.25, model: 2, poly:1) * 16 * 1;
         sig = AnalogVintageDistortion.ar(
             input: sig,
             drivegain: 1, bias: 0, lowgain: 0.3, highgain: 0.0,
             shelvingfreq: 600, oversample: 0
         ) * 0.5;
-        sig = ~v.(sig, 3000) * 8 * 4 * dd.lag(0.1) * 16;
+        sig = ~v.(sig, 3000) * 8 * 4 * dd.lag(0.1) * 4;
         // sig = sig * env2 + (sig * 0.125) * 4;
-    }.play(fadeTime: 0);
+    }.play(fadeTime: 30);
 });
 )
