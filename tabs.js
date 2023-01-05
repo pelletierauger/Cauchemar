@@ -1,17 +1,20 @@
 function setTabs() {
 
 ge.getTab("toms-acc-cb.scd").tick = function(s) {
-    // console.log("Tick!");
-    ge.clearCanvas();
     let xp = 40;
     let yp = this.scroll.y * 9;
-    let x = parseInt(s.substring(0,2)) * xp;
-    // console.log(x);
+    let x = parseInt(s.substring(0,2)) * xp + 77;
     for (let i = 0; i < 16; i++) {
-        let x = i * xp;
-        paintStatic(this.name, 80 + x, 10 + yp, types[1][8], horizontal1);
+        let x = i * xp + 77;
+        paintStatic(this.name, x, 5, types[1][8], horizontal1);
+        paintStatic(this.name, x, 431, types[1][8], horizontal1);
+        paintStatic(this.name, x, 875, types[1][8], horizontal1);
+        paintStatic(this.name, x, 1305, types[1][8], horizontal1);
     }
-        paintStatic(this.name, 80 + x, 10 + yp, types[1][8], full);
+    paintStatic(this.name, x, 5, types[1][8], full);
+    paintStatic(this.name, x, 431, types[1][8], full);
+    paintStatic(this.name, x, 875, types[1][8], full);
+    paintStatic(this.name, x, 1305, types[1][8], full);
 };
 
 ge.getTab("scra-lo-stacca.scd").tick = function(s) {
