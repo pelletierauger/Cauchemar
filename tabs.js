@@ -211,7 +211,106 @@ ge.getTab("sh3.js").display = function() {
 
 
 
-
+ge.getTab("tabs.js").display = function() {
+    bindFrameBuffer(texture, framebuf);
+    gl.viewport(0, 0, cnvs.width, cnvs.height);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    // draw the scene, presumably on a framebuffer
+    // let currentProgram = getProgram("pulsar-fog");
+    // gl.useProgram(currentProgram);
+    // drawBG(currentProgram);
+    // currentProgram = getProgram("new-flickering-dots-vert");
+    // gl.useProgram(currentProgram);
+    // drawAlligatorQuietVert(currentProgram);
+    // currentProgram = getProgram("new-flickering-dots");
+    // gl.useProgram(currentProgram);
+    // drawAlligatorQuiet(currentProgram);
+    let currentProgram = getProgram("rounded-square");
+    time = gl.getUniformLocation(currentProgram, "time"); 
+    gl.useProgram(currentProgram);
+    // ge.c2c(802,802+25);
+    let cc = ge.getTab("tabs.js").canvas.data;
+    ge.eraseCanvas("tabs.js", 0, 802+25, 109, 802+50);
+    for (let i = 0; i < 10000;i++) {
+        let yphase = Math.floor((((drawCount+1e4)+(Math.tan(i)*1e1)) % (25*9))) + ((i*1e3) % (25*9));
+        let xphase = Math.floor(((drawCount+1e4)*Math.tan(i)*0.25) % (109*7)) + ((i*2.3e4) % (109*7));
+        // let x = Math.floor(Math.random() * 109*7);
+       // let x = Math.floor(Math.random() * 109*7);
+        // let y = Math.floor(Math.random() * 25*9);
+        paintRaw(cc, 802+25, xphase, Math.max(0, yphase));
+    }
+    ge.canvasToCanvasSubtract("sh-proto.js", 0, 0, 109, 0+25, "tabs.js", 0, 802+25);
+    // ge.canvasToCanvasAdd("tabs.js", 0, 802+50, 109, 802+75, "tabs.js", 0, 802+25);
+        ge.canvasToCanvasAdd("tabs.js", 0, 802, 109, 802+25, "tabs.js", 0, 802+25);
+    for (let i = 5000; i < 5200;i++) {
+        let yphase = Math.floor((drawCount+(Math.tan(i)*1e1)) % (25*9)) + ((i*1e3) % (25*9));
+        let xphase = Math.floor((drawCount*Math.tan(i)*0.25) % (109*7)) + ((i*2.3e4) % (109*7));
+        // let x = Math.floor(Math.random() * 109*7);
+        // let y = Math.floor(Math.random() * 25*9);
+        // paintRaw(cc, 802+25, xphase, yphase);
+        // paintRaw(cc, 802+25, xphase, Math.min(yphase+2,25*9));
+        // paintRaw(cc, 802+25, Math.min(xphase+2,109*7), yphase);
+        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+1,109*7), Math.max(0,Math.min(yphase+1,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase+1,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+5,109*7), Math.max(0,Math.min(yphase+1,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+2,109*7), Math.max(0,Math.min(yphase+2,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase+2,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+4,109*7), Math.max(0,Math.min(yphase+2,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+1,109*7), Math.max(0,Math.min(yphase+3,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase+3,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+5,109*7), Math.max(0,Math.min(yphase+3,25*9)));
+        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase+4,25*9)));
+        // paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.min(yphase+5,25*9));
+    }
+    drawTerminal(currentProgram);
+    // drawSwirl(currentProgram);
+    // drawPulsar(currentProgram);
+    // unbind the buffer and draw the resulting texture....
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, cnvs.width, cnvs.height);
+    // 
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // 
+    // gl.clearColor(0, 0, 0, 1); // clear to white
+    // 
+    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    // 
+    var textureShader = getProgram("textu");
+    gl.useProgram(textureShader);
+    // 
+    aspect = cnvs.width / cnvs.height;
+    let vertices = new Float32Array([-1, 1, 1, 1, 1, -1, // Triangle 1
+        -1, 1, 1, -1, -1, -1 // Triangle 2
+    ]);
+    // vbuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vbuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+    itemSize = 2;
+    numItems = vertices.length / itemSize;
+    textureShader.aVertexPosition = gl.getAttribLocation(textureShader, "a_position");
+    gl.enableVertexAttribArray(textureShader.aVertexPosition);
+    gl.vertexAttribPointer(textureShader.aVertexPosition, itemSize, gl.FLOAT, false, 0, 0);
+    // 
+    var textureLocation = gl.getUniformLocation(textureShader, "u_texture");
+    gl.uniform1i(textureLocation, 0);
+    var timeLocation = gl.getUniformLocation(textureShader, "time");
+    gl.uniform1f(timeLocation, drawCount * 0.01);
+    // 
+    var scalar = gl.getUniformLocation(textureShader, "resolution");
+    gl.uniform1f(scalar, resolutionScalar);
+    // 
+    var texcoordLocation = gl.getAttribLocation(textureShader, "a_texcoord");
+    gl.enableVertexAttribArray(texcoordLocation);
+    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 2; // 2 components per iteration
+    var type = gl.FLOAT; // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0; // start at the beginning of the buffer
+    gl.vertexAttribPointer(texcoordLocation, size, type, normalize, stride, offset);
+    gl.drawArrays(gl.TRIANGLES, 0, numItems);
+};
 
 
 }

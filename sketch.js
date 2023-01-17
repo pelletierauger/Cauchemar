@@ -5,7 +5,7 @@ let gr;
 let mode = 0;
 let keysActive = true;
 let socket, cnvs, ctx, canvasDOM;
-let fileName = "/Volumes/Volumina/frames/grimoire/feu";
+let fileName = "/Volumes/Volumina/frames/grimoire/bouleaux/bouleaux";
 let JSONs = [];
 let maxFrames = Infinity;
 let gl;
@@ -35,7 +35,7 @@ for (let i = 0; i < 1000000; i++) {
 }
 fvertices = new Float32Array(fvertices);
 
-let resolutionScalar = 0.5;
+let resolutionScalar = 1;
 let resolutionBG;
 
 let fmouse = [0, 0];
