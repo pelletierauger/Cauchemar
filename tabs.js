@@ -208,9 +208,21 @@ ge.getTab("sh3.js").display = function() {
     gl.vertexAttribPointer(texcoordLocation, size, type, normalize, stride, offset);
     gl.drawArrays(gl.TRIANGLES, 0, numItems);
 };
-
-
-
+    
+    Flake = function() {
+        this.x = Math.random() * 109*7;
+        this.y = Math.random() * 25*9;
+        this.sx = (Math.random()*2-1)*3+1;
+        this.sy = (Math.random()*3)+1;
+    }
+    Flake.prototype.constrain = function() {
+        if (this.x < 0) {this.x = 109*7}
+        else if (this.x > 109*7) {x = 0};
+        if (this.y > 25*9) {this.y = 0};
+    }
+    flakes = [];
+    for (let i = 0; i<10000;i++) {flakes.push(new Flake)};
+    
 ge.getTab("tabs.js").display = function() {
     bindFrameBuffer(texture, framebuf);
     gl.viewport(0, 0, cnvs.width, cnvs.height);
@@ -231,36 +243,49 @@ ge.getTab("tabs.js").display = function() {
     // ge.c2c(802,802+25);
     let cc = ge.getTab("tabs.js").canvas.data;
     ge.eraseCanvas("tabs.js", 0, 802+25, 109, 802+50);
-    for (let i = 0; i < 10000;i++) {
-        let yphase = Math.floor((((drawCount+1e4)+(Math.tan(i)*1e1)) % (25*9))) + ((i*1e3) % (25*9));
-        let xphase = Math.floor(((drawCount+1e4)*Math.tan(i)*0.25) % (109*7)) + ((i*2.3e4) % (109*7));
+    for (let i = 0; i < 2500;i++) {
+        // let yphase = Math.floor((((drawCount+1e4)+(Math.tan(i)*1e1)) % (25*9))) + ((i*1e3) % (25*9));
+        // let xphase = Math.floor(((drawCount+1e4)*Math.tan(i)*0.25) % (109*7)) + ((i*2.3e4) % (109*7));
+    let f = flakes[i];
+        f.x += f.sx * 0.25;
+        f.y += f.sy * 0.5;
+        f.constrain();
         // let x = Math.floor(Math.random() * 109*7);
        // let x = Math.floor(Math.random() * 109*7);
         // let y = Math.floor(Math.random() * 25*9);
-        paintRaw(cc, 802+25, xphase, Math.max(0, yphase));
+        paintRaw(cc, 802+25, Math.floor(f.x), Math.floor(f.y));
     }
     ge.canvasToCanvasSubtract("sh-proto.js", 0, 0, 109, 0+25, "tabs.js", 0, 802+25);
     // ge.canvasToCanvasAdd("tabs.js", 0, 802+50, 109, 802+75, "tabs.js", 0, 802+25);
         ge.canvasToCanvasAdd("tabs.js", 0, 802, 109, 802+25, "tabs.js", 0, 802+25);
-    for (let i = 5000; i < 5200;i++) {
-        let yphase = Math.floor((drawCount+(Math.tan(i)*1e1)) % (25*9)) + ((i*1e3) % (25*9));
-        let xphase = Math.floor((drawCount*Math.tan(i)*0.25) % (109*7)) + ((i*2.3e4) % (109*7));
+    for (let i = 5000; i < 5100;i++) {
+        // let yphase = Math.floor((drawCount+(Math.tan(i)*1e1)) % (25*9)) + ((i*1e3) % (25*9));
+        // let xphase = Math.floor((drawCount*Math.tan(i)*0.25) % (109*7)) + ((i*2.3e4) % (109*7));
         // let x = Math.floor(Math.random() * 109*7);
+            let f = flakes[i];
+        f.x += f.sx * 0.25;
+        f.y += f.sy * 0.5;
+        f.constrain();
+        // let x = Math.floor(Math.random() * 109*7);
+       // let x = Math.floor(Math.random() * 109*7);
+        // let y = Math.floor(Math.random() * 25*9);
+        let fx = Math.floor(f.x);
+        let fy = Math.floor(f.y);
         // let y = Math.floor(Math.random() * 25*9);
         // paintRaw(cc, 802+25, xphase, yphase);
         // paintRaw(cc, 802+25, xphase, Math.min(yphase+2,25*9));
         // paintRaw(cc, 802+25, Math.min(xphase+2,109*7), yphase);
-        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+1,109*7), Math.max(0,Math.min(yphase+1,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase+1,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+5,109*7), Math.max(0,Math.min(yphase+1,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+2,109*7), Math.max(0,Math.min(yphase+2,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase+2,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+4,109*7), Math.max(0,Math.min(yphase+2,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+1,109*7), Math.max(0,Math.min(yphase+3,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase+3,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+5,109*7), Math.max(0,Math.min(yphase+3,25*9)));
-        paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.max(0,Math.min(yphase+4,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+3,109*7), Math.max(0,Math.min(fy,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+1,109*7), Math.max(0,Math.min(fy+1,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+3,109*7), Math.max(0,Math.min(fy+1,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+5,109*7), Math.max(0,Math.min(fy+1,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+2,109*7), Math.max(0,Math.min(fy+2,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+3,109*7), Math.max(0,Math.min(fy+2,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+4,109*7), Math.max(0,Math.min(fy+2,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+1,109*7), Math.max(0,Math.min(fy+3,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+3,109*7), Math.max(0,Math.min(fy+3,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+5,109*7), Math.max(0,Math.min(fy+3,25*9)));
+        paintRaw(cc, 802+25, Math.min(fx+3,109*7), Math.max(0,Math.min(fy+4,25*9)));
         // paintRaw(cc, 802+25, Math.min(xphase+3,109*7), Math.min(yphase+5,25*9));
     }
     drawTerminal(currentProgram);
