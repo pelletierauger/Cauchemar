@@ -243,7 +243,7 @@ ge.getTab("tabs.js").display = function() {
     // ge.c2c(802,802+25);
     let cc = ge.getTab("tabs.js").canvas.data;
     ge.eraseCanvas("tabs.js", 0, 802+25, 109, 802+50);
-    for (let i = 0; i < 2500;i++) {
+    for (let i = 0; i < 2500*3;i++) {
         // let yphase = Math.floor((((drawCount+1e4)+(Math.tan(i)*1e1)) % (25*9))) + ((i*1e3) % (25*9));
         // let xphase = Math.floor(((drawCount+1e4)*Math.tan(i)*0.25) % (109*7)) + ((i*2.3e4) % (109*7));
     let f = flakes[i];
