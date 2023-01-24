@@ -390,6 +390,8 @@ x = {
 
 ~toms.set(\gli, 0.9);
 ~toms.set(\engine, 9);
+~toms.set(\engine, 10);
+~toms.set(\engine, 5);
 
 (
 // ~toOSC = NetAddr.new("127.0.0.1", 57121);    // create the NetAddr

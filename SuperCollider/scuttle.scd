@@ -1,5 +1,6 @@
 (
 ~nT.sched(~nT.timeToNextBeat(quant: 4), {
+    // if(~toms.isPlaying, {~toms.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
  ~amas.set(\gate, 0, \fadeTime, 1);
  ~amas = {
      | trigGate = 1 |
@@ -8,7 +9,7 @@
      var t = tr[0] * dd * Demand.kr(tr[0] * dd,0, Dseq([1,0,0,0] ++(0!4),inf));
      var d = Demand.kr(t, 0, Drand([0, 1],inf) ! 20).lag(1);
      var sig = MiBraids.ar(
-         27 + 12 * ((1..20) / 400 + 1) + [0, 3, 7, 14, 15].wrapExtend(20),
+         \pitch.kr(27 + 12) * ((1..20) / 400 + 1) + [0, 3, 7, 14, 15].wrapExtend(20),
          timbre:~lfo.(0.01),
          color: 0.75,
          model:38
@@ -19,6 +20,9 @@
 });
 )
 
+
+~amas.set(\pitch, 27 + 0);
+~amas.set(\pitch, 27 - 12);
 
 (
 ~nT.sched(~nT.timeToNextBeat(quant: 4), {
@@ -138,7 +142,7 @@ var n = \rest;
         // sig = ~v.(sig, 7000);
         // sig3 = VadimFilter.ar(sig3, scr.linlin(0, 1, 5000, 500), 0, 5) * 8;
         // sig = sig + (sig3 * Demand.kr(trig!2, 0, Dwhite(0.00, 1.00, inf)).lag(1));
-        sig * 1;
+        sig * 0.5;
     }.play(fadeTime: 0.01).register;
 });
 )
