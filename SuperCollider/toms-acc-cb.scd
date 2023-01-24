@@ -392,6 +392,7 @@ x = {
 ~toms.set(\engine, 9);
 ~toms.set(\engine, 10);
 ~toms.set(\engine, 5);
+~toms.set(\engine, 8);
 
 (
 // ~toOSC = NetAddr.new("127.0.0.1", 57121);    // create the NetAddr
@@ -411,6 +412,11 @@ x = {
 String
 
 
+(
+    if(~toms.isPlaying, {~toms.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
+    if(~toms3.isPlaying, {~toms3.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
+x.set(\gate, 0, \fadeTime, 0.1);
+)
 
 
 // Hats très hauts
