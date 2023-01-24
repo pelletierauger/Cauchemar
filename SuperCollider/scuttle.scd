@@ -73,7 +73,7 @@
 ~buzzyHats = Pbind(
     \instrument, \sampler,
     \buf, ~samples.at('buzzy02'),
-    \dur, 0.25 * (4*0),
+    \dur, 0.25 * (4*0.25),
     \amp, Pseq([1, 0.75, 0.75, 0.75]*0.25, inf) + Pseq(Pseries(0, 0.1, 16).asStream.nextN(16), inf) * 0.5
 ).play(~nT, quant: [4, 0]);
 )
