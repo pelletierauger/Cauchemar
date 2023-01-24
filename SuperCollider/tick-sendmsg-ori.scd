@@ -2,7 +2,6 @@ s.boot;
 
 ~nT = TempoClock.new(1.39 * 1 * 1.25).permanent_(true);
 ~nT.tempo;
-~nT.tempo = 1.39 * 1 * 1.25;
 ~cb = Bus.control(s, 2);
 Safety(s).disable;
 (
@@ -19,23 +18,6 @@ SynthDef.new(\tick, {
 ~toOSC.sendMsg("/eval", s);
 ~toOSC.sendMsg("/chunk", "00000001");
 
-(
-~go_to = { |tab, line| 
-    var s;
-    if (line == nil, {
-        s = "go_to(\"" ++ tab ++ "\")";
-        s.postln;
-        ~toOSC.sendMsg("/eval", s);
-    }, {
-        s = "go_to(\"" ++ tab ++ "\"," ++ line ++ ")";
-        s.postln;
-        ~toOSC.sendMsg("/eval", s);
-    });
-};
-)
-
-~go_to.("gnaw-low.scd", 0);
-
 ~msg = "000000";
 
 (
@@ -48,9 +30,9 @@ var stepIndex = Pseq((0..15), inf).asStream;
         \dur, 0.25,
         \dur, FuncStream({
             var n = stepIndex.next;
-            // ~msg = n.asString.padLeft(2, "0");
+            var m = n.asString.padLeft(2, "0") ++ ~msg;
             // m.postln;
-            ~toOSC.sendMsg("/beat", n);
+            ~toOSC.sendMsg("/beat", m);
             0.25;
         }),
         \beat, Pseq([1, 0, 0, 0], inf),

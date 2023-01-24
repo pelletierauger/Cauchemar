@@ -8,7 +8,7 @@ var sf = PathName.new(dir);
 });
 )
 ~samples;
-
+d.play
 d = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Art/SuperCollider/SuperCollider-Sketches/hop-samples/hop-ri000.aiff");
 e = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Art/SuperCollider/SuperCollider-Sketches/hop-samples/hop-ri001.aiff");
 f = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Art/SuperCollider/SuperCollider-Sketches/hop-samples/hop-ri002.aiff");
@@ -17,14 +17,14 @@ f = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Art/SuperCollider/
 SynthDef(\sampler, {
     arg buf, rate = 1, spos = 0, pan = 1, amp = 1, atk = 0.001, susT = 1, rel = 0.01, out = 0;
     var sig, env, lfo;
-    // env = EnvGen.kr(Env.new([0, 1, 1, 0], [atk, susT, rel], ['lin', -8]), doneAction: 2);
+    env = EnvGen.kr(Env.new([0, 1, 1, 0], [atk, susT, rel], ['lin', -8]), doneAction: 2);
     sig = PlayBuf.ar(
         2, buf,
         rate * BufRateScale.ir(buf),
         startPos: spos * BufSampleRate.ir(buf),
         doneAction: 2
     );
-    sig = sig * amp;
+    sig = sig * amp * env;
     sig = Balance2.ar(sig[0], sig[1], pan, 1);
     Out.ar(out, sig);
 }).add;
@@ -33,15 +33,51 @@ SynthDef(\sampler, {
 SynthDef(\samplerFlip, {
     arg buf, rate = 1, spos = 0, pan = 1, amp = 1, atk = 0.001, susT = 1, rel = 0.01, out = 0;
     var sig, env, lfo;
-    // env = EnvGen.kr(Env.new([0, 1, 1, 0], [atk, susT, rel], ['lin', -8]), doneAction: 2);
+    env = EnvGen.kr(Env.new([0, 1, 1, 0], [atk, susT, rel], ['lin', -8]), doneAction: 2);
     sig = PlayBuf.ar(
         2, buf,
         rate * BufRateScale.ir(buf),
         startPos: spos * BufSampleRate.ir(buf),
         doneAction: 2
     );
-    sig = sig * amp;
-    sig = Balance2.ar(sig[1], sig[0], pan, 1);
+    sig = sig * amp * env;
+    sig = Balance2.ar(sig[0], sig[1], pan, 1);
+    Out.ar(out, sig.reverse);
+}).add;
+)
+
+(
+SynthDef(\samplerFlipLPF, {
+    arg buf, rate = 1, spos = 0, pan = 1, amp = 1, atk = 0.001, susT = 1, rel = 0.01, out = 0;
+    var sig, env, lfo;
+    env = EnvGen.kr(Env.new([0, 1, 1, 0], [atk, susT, rel], ['lin', -8]), doneAction: 2);
+    sig = PlayBuf.ar(
+        2, buf,
+        rate * BufRateScale.ir(buf),
+        startPos: spos * BufSampleRate.ir(buf),
+        doneAction: 2
+    );
+    sig = sig * amp * env;
+    sig = ~v.(sig,2000);
+    sig = Balance2.ar(sig[0], sig[1], pan, 1);
+    Out.ar(out, sig.reverse);
+}).add;
+)
+
+(
+SynthDef(\samplerHPF, {
+    arg buf, rate = 1, spos = 0, pan = 1, amp = 1, atk = 0.001, susT = 1, rel = 0.01, out = 0;
+    var sig, env, lfo;
+    env = EnvGen.kr(Env.new([0, 1, 1, 0], [atk, susT, rel], ['lin', -8]), doneAction: 2);
+    sig = PlayBuf.ar(
+        2, buf,
+        rate * BufRateScale.ir(buf),
+        startPos: spos * BufSampleRate.ir(buf),
+        doneAction: 2
+    );
+    sig = sig * amp * env;
+    sig = ~v.(sig, 1000, 0, 5);
+    sig = Balance2.ar(sig[0], sig[1], pan, 1);
     Out.ar(out, sig);
 }).add;
 )
@@ -126,8 +162,9 @@ s.unmute;
 ~guit = Pbind(
     \instrument, \sampler,
     \buf, d,
+    \susT, 2,
     \dur, 2,
-    \amp, 0.25
+    \amp, 1
 ).play(~nT, quant: 4);
 )
 

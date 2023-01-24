@@ -1,60 +1,3 @@
-(
-~hiss.free;
-~hiss = {
-    | trigGate = 1 |
-    var tr = In.kr(~cb, 2) * trigGate;
-    var dd = Demand.kr(tr[0], 0, Dseq([1]));
-    var t0 = tr[1] * dd;
-    var t = t0 * Demand.kr(t0, 0, Dseq([0, 0, 1, 0], inf));
-    var m = Demand.kr(t, 0, Dseq([-5, -7].stutter(32), inf));
-    var n = Demand.kr(t, 0, Dseq([0.25, 0.6].stutter(32), inf));
-    var env = EnvGen.kr(Env.new([0, 1, 0], [0.01, 2], ['lin', -8]), gate: t);
-    var ri;
-    var pitch = ~toMidi.("B2") + -5 + 12;
-    var sig = MiBraids.ar(pitch + [0, 0.1] + 0,
-        timbre: SinOsc.kr(~nT.tempo * 0.25).unipolar * 0.2, color: 0.5, model: 1
-    ) * 0.4;
-    sig = MiRings.ar(0, t, pit: pitch - 24 - 5 + -12 - 12,
-        struct: 0.5, bright: 0.75, damp: 0.65, pos: 0.275,
-        model: 4, easteregg: 1, poly: 1, intern_exciter: 1);
-    // sig = VadimFilter.ar(sig, 100 * env.lag(0.2) + 200, 0, 5);
-    // sig = MiMu.ar(sig, 24) * 0.5;
-    sig = VadimFilter.ar(sig, 3000 * env.lag(0.01) + 100, 0, 5) * 8;
-    sig = ~v.(sig, 2000, 0, 5) * env;
-    // sig = (ri) + (sig * ri * 0);
-    sig * 0.5 * dd.lag(0.1);
-}.play;
-)
-
-
-(
-e.free;
-e = {
-    | trigGate = 1 |
-    var tr = In.kr(~cb, 2) * trigGate;
-    var dd = Demand.kr(tr[0], 0, Dseq([1]));
-    var t0 = tr[0] * dd;
-    var t = t0 * Demand.kr(t0, 0, Dseq([1, 0], inf));
-    var m = Demand.kr(t, 0, Dseq([-5, -7].stutter(32), inf));
-    var n = Demand.kr(t, 0, Dseq([0.25, 0.6].stutter(32), inf));
-    var env = EnvGen.kr(Env.new([0, 1, 0], [0.01, 15], ['lin', -8]), gate: t);
-    var ri;
-    var pitch = ~toMidi.("B2") + -5 + 12;
-    var sig = MiRings.ar(0, t, pit: pitch - 24 - 5 + -12 - 12,
-        struct: 0.125, bright: 0.75, damp: 0.65, pos: 0.275,
-        model: 4, easteregg: 1, poly: 1, intern_exciter: 1);
-    // sig = VadimFilter.ar(sig, 100 * env.lag(0.2) + 200, 0, 5);
-    // sig = MiMu.ar(sig, 24) * 0.5;
-    sig = VadimFilter.ar(sig, 3000 * env.lag(0.1) + 200, 0, 5) * 8;
-    // sig = (ri) + (sig * ri * 0);
-    sig * 0.5 * dd.lag(0.1);
-}.play;
-)
-
-
-
-
-
 
 ~nT = TempoClock.new(1.39 * 1 * 1.25).permanent_(true);
 ~nT.tempo;
@@ -147,11 +90,13 @@ s.stopRecording
         // sig3 = [sig2, sig3] * 0.25;
         // sig3 = VadimFilter.ar(sig3, scr.linlin(0, 1, 5000, 500), 0, 5) * 8;
         // sig = sig + (sig3 * Demand.kr(trig!2, 0, Dwhite(0.00, 1.00, inf)).lag(1));
-        sig = sig * 3;
-        // sig + (GVerb.ar(sig,revtime:1,damping:0.125)*0.125*0.125);
+        sig * 2;
     }.play(fadeTime: 0.01).register;
 });
 )
+
+
+
 (
 ~nT.sched(~nT.timeToNextBeat(quant: 4) - (~nT.beatDur * 0.5), {
     if(~toms2.isPlaying, {~toms2.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
@@ -172,24 +117,22 @@ s.stopRecording
         var hh = Demand.kr(trig * block2, 0, Dseq([0.9, 1.1], inf));
         var scr = Demand.kr(trig!2, 0, Dwhite(0.00, 1.00, inf));
         var sig = MiPlaits.ar(
-            pitch: 27 + [0, 12, 12, 12+7] + 12,
+            pitch: 27 + [0, 12, 12, 24] + 12,
             engine: 9,
             harm: [0.25, 0.4, 0.4, 0.4],
             timbre: [1, 1, 1, 1],
-            morph: 0.75 - [0, 0.2, 0, 0.5],
+            morph: 0.75 - [0, 0.2, 0, -0.2],
             trigger: (trig!3)++(trig2!1) * [block0, block1, block1, block2] * trigGate,
-            decay: [0.9, 0.6, 0.6, 0.6] * 0.5,
-            lpg_colour: [0.75, 0.75, 0.75, 0.75],
+            decay: [0.9, 0.6, 0.6, 2] * 0.5,
+            lpg_colour: [0.75, 0.75, 0.75, 0],
             // fm_mod: -0.5,
             // timb_mod: 0.5
-            morph_mod: [-1,-1,-1,-1]
+            morph_mod: -1
         ) * dd.lag(0.05);
         var v = 1;
         var sig3;
         var sig2 = [sig[1][v], sig[2][v]] * 1.5 * Line.kr(0, 1, ~nT.beatDur * 2);
-        var sur = (sig[3][v] * 0.5 * 2)*0;
-        // sur = ~v.(sur,500) + ~v.(sur, 1000,0,5);
-        sig = [sig[0][v] * 2*1 + sur]!2 + (sig2*1);
+        sig = [sig[0][v] * 2 + (sig[3][v] * 0.5 * 0)]!2 + sig2;
         // sig2 = (MiWarps.ar(sig[0], PinkNoise.ar() * sig[0], 0.75, 0.25, algo: 1, timb: 0.4)[0]);
         // sig3 = (MiWarps.ar(sig[1], PinkNoise.ar() * sig[1], 0.75, 0.25, algo: 1, timb: 0.4)[0]);
         // sig3 = [sig2, sig3] * 0.25;
@@ -197,7 +140,6 @@ s.stopRecording
         // sig3 = VadimFilter.ar(sig3, scr.linlin(0, 1, 5000, 500), 0, 5) * 8;
         // sig = sig + (sig3 * Demand.kr(trig!2, 0, Dwhite(0.00, 1.00, inf)).lag(1));
         sig;
-        // sig + (GVerb.ar(sig,revtime:1,damping:0.125)*0.125*0.5)*0.5;
     }.play(fadeTime: 0.01).register;
 });
 )
@@ -300,7 +242,7 @@ if(~tomsZ.isPlaying, {~tomsZ.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
         sig3 = [sig2, sig3] * 0.5;
         sig3 = VadimFilter.ar(sig3, scr.linlin(0, 1, 5000, 500) - 400, 0, 5) * 8;
         sig = sig + (sig3 * Demand.kr(trig!2, 0, Dwhite(0.00, 1.00, inf)).lag(1));
-        sig * 0.65*2;
+        sig * 0.65;
     }.play(fadeTime: 0.01).register;
 });
 )

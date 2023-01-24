@@ -3,18 +3,24 @@ function setTabs() {
 ge.getTab("toms-acc-cb.scd").tick = function(s) {
     let xp = 40;
     let yp = this.scroll.y * 9;
-    let x = parseInt(s.substring(0,2)) * xp + 77;
+    let x = s * xp + 77;
+    // let distu = parseInt(s.substring(2,3));
+    // console.log(s.substring(2,3));
     for (let i = 0; i < 16; i++) {
         let x = i * xp + 77;
         paintStatic(this.name, x, 5, types[1][8], horizontal1);
         paintStatic(this.name, x, 431, types[1][8], horizontal1);
         paintStatic(this.name, x, 875, types[1][8], horizontal1);
         paintStatic(this.name, x, 1305, types[1][8], horizontal1);
+        paintStatic(this.name, x, 244 * 9 + 35, types[1][8], horizontal1);
+        paintStatic(this.name, x, 305 * 9 + 70, types[1][8], horizontal1);
     }
     paintStatic(this.name, x, 5, types[1][8], full);
     paintStatic(this.name, x, 431, types[1][8], full);
     paintStatic(this.name, x, 875, types[1][8], full);
     paintStatic(this.name, x, 1305, types[1][8], full);
+    paintStatic(this.name, x, 244 * 9 + 35, types[1][8], full);
+    paintStatic(this.name, x, 305 * 9 + 70, types[1][8], full);
 };
 
 ge.getTab("scra-lo-stacca.scd").tick = function(s) {

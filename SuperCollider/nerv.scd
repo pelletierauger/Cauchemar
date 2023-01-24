@@ -35,7 +35,7 @@
             drivegain: 1, bias: 0, lowgain: 0.3, highgain: 0.3,
             shelvingfreq: 600, oversample: 0
         ) * 0.75 * env;
-        ~v.(sig, 100 + (4000 * env) + 100 + ~x.(0,7000)) * 0.1 ! 2 * dd.lag(0.05);
+        ~v.(sig * 1, 100 + (4000 * env) + 100 + ~x.(0,7000)) * 0.1 ! 2 * dd.lag(0.05);
     }.play(fadeTime: 0);
 });
 )

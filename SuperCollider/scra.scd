@@ -46,7 +46,7 @@
         ) * 8;*/
         MiRings.ar(sig!2,
             pit: 27+12+note, struct: 0.25, bright: 0.25,
-            damp: 0.2, pos: 0.25, model: 2) * 16 * 8 * dd.lag(0.05);
+            damp: 0.2, pos: 0.25, model: 2) * 16 * 8 * dd.lag(0.05) * 1;
     }.play(fadeTime: 0.05);
 });
 )

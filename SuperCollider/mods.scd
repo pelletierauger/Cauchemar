@@ -15,7 +15,7 @@ s.record;
 x.free;
 x = {
     var safeEnv = EnvGen.kr(Env([0,0,1], [0.009,0.001]));
-    var sig = MiBraids.ar(27+12, 0.5, ~lfo.([3,3.1],0.5,0.55), model: 14);
-    ~v.(sig,1000) * 0.3 * Line.kr(0,1,0.125) * safeEnv;
+    var sig = MiBraids.ar(27+0, 0.5, ~lfo.([3,3.1],0.5,0.55), model: 14);
+    ~v.(sig,500) * 0.3 * Line.kr(0,1,0.125) * safeEnv;
 }.play;
 )
