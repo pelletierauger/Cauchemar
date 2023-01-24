@@ -1,7 +1,7 @@
 (
 ~nT.sched(~nT.timeToNextBeat(quant: 4) - (~nT.beatDur * 0.5), {
-    if(~toms3.isPlaying, {~toms3.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
-    ~toms3 = {
+    if(~mena.isPlaying, {~mena.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
+    ~mena = {
         | trigGate = 1 |
         var tr = In.kr(~cb, 2) * trigGate;
         var dd = Demand.kr(tr[0], 0, Dseq([1])); // This opens up the triggers.
@@ -9,8 +9,8 @@
         var trig = t;
         var trig2 = t + DelayN.kr(t, 0.5, ~nT.beatDur / 16+((0..4)/100)).sum;
         var pat0 = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        var pat1 = [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0] ++ (0!16);
-        var pat2 = (0!16) ++ [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0];
+        var pat1 = [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0] ++ (0!16) * 0;
+        var pat2 = [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0];
         var block0 = Demand.kr(trig, 0, Dseq(pat0, inf));
         var block1 = Demand.kr(trig, 0, Dseq(pat1, inf));
         var block2 = Demand.kr(trig, 0, Dseq(pat2, inf));
@@ -27,7 +27,7 @@
             morph: [0.25, 0.25, 0.25, 0.25],
             trigger: (trig!3)++(trig2!1) * [block0, block1, block1, block2] * trigGate,
             // decay: [0.9, 0.6, 0.6, 0.9] * 0.5,
-            decay: 0.68,
+            decay: \decay.kr(0.68),
             // lpg_colour: [0.75, 0.75, 0.75, 1],
             lpg_colour: 0,
             // fm_mod: -0.5,
@@ -44,7 +44,15 @@
         // sig3 = VadimFilter.ar(sig3, /*scr*/.linlin(0, 1, 5000, 500), 0, 5) * 8;
         // sig = sig + (sig3 * Demand.kr(trig!2, 0, Dwhite(0.00, 1.00, inf)).lag(1));
         // sig = sig * 0.5 + (~v.(sig, 3000, 0, 5) * 8);
-        sig * 0.5;
+        sig * 0.25 * Line.kr(0,1,30);
     }.play(fadeTime: 0.01).register;
 });
+)
+~mena.set(\decay, 0.98);
+
+
+(
+    if(~mena.isPlaying, {~mena.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
+    ~scraLo.set(\trigGate, 0, \gate, 0, \fadeTime, 60.1);
+    if(~toms.isPlaying, {~toms.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
 )

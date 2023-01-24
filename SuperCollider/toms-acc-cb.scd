@@ -322,6 +322,17 @@ if(~tomsZ.isPlaying, {~tomsZ.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
 (
 ~nT.sched(~nT.timeToNextBeat(quant: 4) - (~nT.beatDur * 0.5), {
     // ~x3b.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1);
+x.free;
+x = {
+        | trigGate = 1|
+        var tr = ~tks.(1, trigGate);
+        var dd = tr[1];
+        var t = (tr[0]) * dd;
+        var trig = t;
+    var safeEnv = EnvGen.kr(Env([0,0,1], [0.009,0.001]));
+    var sig = MiBraids.ar(27+0, 0.5, ~lfo.([3,3.1],0.5,0.55), model: 14);
+    ~v.(sig,200) * 0.3 * Line.kr(0,1,0.125) * safeEnv * dd.lag(0.1);
+}.play;
 /*    ~x3bbb.set(\trigGate, 0, \gate, 0, \fadeTime, 0.1);
     ~guitOld.stop;
     ~guitOldB.stop;

@@ -1,20 +1,20 @@
 (
 ~nT.sched(~nT.timeToNextBeat(quant: 4), {
- ~amasAmythist.free;
- ~amasAmythist =
-    {        | trigGate = 1 |
-        var tr = In.kr(~cb, 2) * trigGate;
-        var dd = Demand.kr(tr[0], 0, Dseq([1])); // This opens up the triggers.
-        var t = tr[0] * dd * Demand.kr(tr[0]*dd,0, Dseq([1,0,0,0] ++(0!4),inf));
-
-    var d = Demand.kr(t, 0, Drand([0,1],inf)!20).lag(1);
-    var sig = MiBraids.ar(
-        27+12*((1..20)/400+1) + [0,3,7,14,15].wrapExtend(20),
-        timbre:~lfo.(0.01),
-        color: 0.75,
-        model:38).scramble;
-    sig = sig * d;
-    sig = Splay.ar(sig) * 0.5 * 1 * Line.kr(0,1,5);
+ ~amas.set(\gate, 0, \fadeTime, 1);
+ ~amas = {
+     | trigGate = 1 |
+     var tr = In.kr(~cb, 2) * trigGate;
+     var dd = Demand.kr(tr[0], 0, Dseq([1])); // This opens up the triggers.
+     var t = tr[0] * dd * Demand.kr(tr[0] * dd,0, Dseq([1,0,0,0] ++(0!4),inf));
+     var d = Demand.kr(t, 0, Drand([0, 1],inf) ! 20).lag(1);
+     var sig = MiBraids.ar(
+         27 + 12 * ((1..20) / 400 + 1) + [0, 3, 7, 14, 15].wrapExtend(20),
+         timbre:~lfo.(0.01),
+         color: 0.75,
+         model:38
+     ).scramble;
+     sig = sig * d;
+     sig = Splay.ar(sig) * 0.5 * 1 * Line.kr(0,1,5);
 }.play;
 });
 )
@@ -49,7 +49,6 @@
         var tr = In.kr(~cb, 2) * trigGate;
         var dd = Demand.kr(tr[0], 0, Dseq([1])); // This opens up the triggers.
         var t = tr[0] * dd * Demand.kr(tr[0]*dd,0, Dseq([1,0,0,0] ++(0!4),inf));
-
      var d = Demand.kr(t, 0, Drand([0,1],inf)!20).lag(1);
     var sig = MiBraids.ar(
         27+24*((1..20)/400+1) + [0,3,7,14,15].wrapExtend(20),

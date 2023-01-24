@@ -89,14 +89,10 @@ var n = \rest;
     \susT, ~samples.at('buzzy01').duration-1-0.001-1.5,
     \atk, 0.025,
     \rel, 1,
-    \dur, Pseq([4, 4], inf),
+    \dur, Pseq([8], inf),
     \amp, 16
 ).play(~nT, quant: [4]);
-)
 
-
-
-(
 ~buzzBass.stop;
 ~buzzBass = Pbind(
     \instrument, \sampler,
@@ -106,8 +102,8 @@ var n = \rest;
     \atk, 0.025,
     \rate, 0.midiratio,
     \rel, 1,
-    \dur, Pseq([Rest(2), 2], inf),
-    \amp, 2
+    \dur, Pseq([Rest(4), 4], inf),
+    \amp, 3
 ).play(~nT, quant: [4, -0.2]);
 )
 0.25 * 5.midiratio

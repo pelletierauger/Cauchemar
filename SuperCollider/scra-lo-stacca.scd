@@ -12,7 +12,7 @@
         var note = Demand.kr(t, 0, Dseq(
             [0, 0, 0, 1, 3, 3, 3, 5, 0, 0, 0, 1, -1, -1, -1, -2].stutter(4), inf));
         var sig = MiBraids.ar(
-            pitch: 27 + 24 + [0, 0.5],
+            pitch: 27 + 24 + [0, 0.5] + 12,
             timbre: 0.5 + [0.0, 0.1],
             color: 0.5 + (note * 0.2),
             model: 28,
@@ -43,14 +43,14 @@
             Demand.kr(t, 0, Dseq([-0.5, 0.5].stutter(1).lag(1), inf))
         ) * 8;*/
         sig = MiRings.ar(sig!2,
-            pit: 27, struct: 0.25, bright: 0.125,
+            pit: 27+12, struct: 0.25, bright: 0.125,
             damp: 0.2, pos: 0.25, model: 2, poly:1) * 16 * 1;
         sig = AnalogVintageDistortion.ar(
             input: sig,
             drivegain: 1, bias: 0, lowgain: 0.3, highgain: 0.0,
             shelvingfreq: 600, oversample: 0
         ) * 0.5;
-        sig = ~v.(sig, 3000) * 8 * 4 * dd.lag(0.1) * 4;
+        sig = ~v.(sig, 3000) * 8 * 4 * dd.lag(0.1) * 4 * 2;
         // sig = sig * env2 + (sig * 0.125) * 4;
     }.play(fadeTime: 30);
 });
