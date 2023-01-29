@@ -15,7 +15,7 @@
          model:38
      ).scramble;
      sig = sig * d;
-     sig = Splay.ar(sig) * 0.5 * 1 * Line.kr(0,1,5);
+     sig = Splay.ar(sig) * 0.5 * 1 * Line.kr(0,1,5) * 0.5;
 }.play;
 });
 )
