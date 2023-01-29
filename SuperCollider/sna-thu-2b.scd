@@ -48,12 +48,19 @@
     }.play(fadeTime: 0.01).register;
 });
 )
-~mena.set(\decay, 0.68);
+~mena.set(\decay, 0.78);
 
 
 (
-    if(~mena.isPlaying, {~mena.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
-    ~scraLo.set(\trigGate, 0, \gate, 0, \fadeTime, 60.1);
-    if(~toms.isPlaying, {~toms.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
-    if(~toms3.isPlaying, {~toms3.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
+if(~mena.isPlaying, {~mena.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
+~scraLo.set(\trigGate, 0, \gate, 0, \fadeTime, 60.1);
+if(~toms.isPlaying, {~toms.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
+if(~toms3.isPlaying, {~toms3.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1)});
+~amas.set(\pitch, 27);
+~buzz.stop;
+~buzzyHats.stop;
+~buzzMid.stop;
+~buzzBass.stop;
 )
+
+~go_to.("samples.scd")

@@ -1817,12 +1817,13 @@ drawAlligatorQuietVert = function(selectedProgram) {
 drawScratches = function() {
     mS = 1;
     amountOfScratches = Math.max(0, amountOfScratches);
+    let amount = num;
     if (drawCount % 100 == 0) {
         mS = random(0.8, 1);
     }
-    if (drawCount % 10 == 0) {
-        if (Math.random() > 0.9) {
-            amountOfScratches += random(20, 60);
+    if (drawCount % (Math.floor(random(0, 50))) == 0) {
+        if (Math.random() > 0.99) {
+            amountOfScratches += random(12, 60);
             // fluctuation = 4;
         } else {
             amountOfScratches += 12;
@@ -1857,4 +1858,14 @@ drawScratches = function() {
             num++;
         }
     }
+    // let sc = `~dust.set(\\amount, ${amountOfScratches})`;
+    var msgToSend = {
+        address: "/dusty",
+        args: [{
+            type: "i",
+            value: num - amount
+        }]
+    };
+    socket.emit('msgToSCD', msgToSend);
+    // socket.emit('interpretSuperCollider', sc, files.scd[0].path);
 }
