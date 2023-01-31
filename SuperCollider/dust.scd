@@ -43,3 +43,13 @@ OSCdef.new(
     'dusty'
 );
 )
+
+
+
+(
+r.stop;
+r = Routine({
+{~toOSC.sendMsg("/eval", "siderA = " ++ floor(rrand(2,16)) ++ ", siderB = " ++ floor(rrand(2,32)));
+    8.wait;}.loop;
+}).play(~nT, quant: [4]);
+)

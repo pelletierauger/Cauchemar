@@ -1,3 +1,4 @@
+ranScratch = 50;
 drawDots = function() {
     vertices = [];
     let xOffset = (noise(frameCount * 0.0025) - 0.5) * 0.9;
