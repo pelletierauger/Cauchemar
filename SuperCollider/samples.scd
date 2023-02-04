@@ -1,37 +1,50 @@
-s.quit;
-s.boot;
-s.sampleRate
-s.unmute;
-s.mute;
-
-
-
 (
-var samplesFolder;
 var dir = thisProcess.nowExecutingPath.dirname +/+ "samples/";
 var sf = PathName.new(dir);
 ~samples = ();
-sf.entries.do({
-    arg path, i;
-    ~samples.put(path.fileNameWithoutExtension.asSymbol, Buffer.read(s, path.fullPath));
-    path.fileName.postln;
+sf.entries.do({| path, i |
+    ~samples.put(path.fileNameWithoutExtension.asSymbol, 
+        Buffer.read(s, path.fullPath)
+    );
 });
 ~samples;
 )
-~samples.at('buzzy-bass').play;
+
+// ——————————————————————————————— //
+// Les guitares qui grincent et larmoient.
+// ——————————————————————————————— //
+([0.25,0.5].wrapExtend(6)++[0.75,1]).sum
 (
-var dir = thisProcess.nowExecutingPath.dirname +/+ "samples/";
-var sf = PathName.new(dir);
-~samples = sf.entries.collect({
-    | path |
-    Buffer.read(s, path.fullPath);
-});
+~buzzMid.stop;
+~buzzMid = Pbind(
+    \instrument, \samplerFlipLPF,
+    \buf, ~samples.at('buzzy01'),
+    \spos,1.5,
+    \susT, ~samples.at('buzzy01').duration-1-0.001-1.5,
+    \atk, 0.025,
+    \rel, 1,
+    \dur, Pseq([8], inf),
+    \amp, 16
+).play(~nT, quant: [4]);
+
+~buzzBass.stop;
+~buzzBass = Pbind(
+    \instrument, \sampler,
+    \buf, ~samples.at('buzzy-bass'),
+    \spos,0,
+    \susT, ~samples.at('buzzy-bass').duration-1-0.001,
+    \atk, 0.025,
+    \rate, 0.midiratio,
+    \rel, 1,
+    \dur, Pseq([Rest(4), 4], inf),
+    \amp, 3
+).play(~nT, quant: [4, -0.2]);
 )
-~samples;
-~samples[2].play
-~samples[0].duration
-~toNote.(27)
-s.mute;
+
+// ——————————————————————————————— //
+// La guitare qui murmure.
+// ——————————————————————————————— //
+
 (
 ~buzz.stop;
 ~buzz = Pbind(
@@ -43,6 +56,31 @@ s.mute;
     \amp, Pseq([\rest, 1.5], inf)
 ).play(~nT, quant: [4, -0.0625*2]);
 )
+
+
+(
+~buzzyHats.stop;
+~buzzyHats = Pbind(
+    \instrument, \sampler,
+    \buf, ~samples.at('buzzy02'),
+    \dur, 0.25 * (4*0.25),q;
+    \amp, Pseq([1, 0.75, 0.75, 0.75]*0.25, inf) + Pseq(Pseries(0, 0.1, 16).asStream.nextN(16), inf) * 0.5
+).play(~nT, quant: [4, 0]);
+)
+
+(
+~buzzyHats.stop;
+~buzzyHats = Pbind(
+    \instrument, \sampler,
+    \buf, ~samples.at('buzzy02'),
+    \dur, Pseq([0.25,0.5].wrapExtend(8)++[0.5,0.5], inf),
+    \amp, Pseq([1, 0.75]*0.25, inf) + Pseq(Pseries(0, 0.1, 20).asStream.nextN(20), inf) * 0.5
+).play(~nT, quant: [4, 0]);
+)
+
+go oubliette
+
+
 
 (
 ~buzzyHats.stop;
@@ -80,30 +118,5 @@ var n = \rest;
 ).play(~nT, quant: [4]);
 )
 ~samples[2]
-(
-~buzzMid.stop;
-~buzzMid = Pbind(
-    \instrument, \samplerFlipLPF,
-    \buf, ~samples.at('buzzy01'),
-    \spos,1.5,
-    \susT, ~samples.at('buzzy01').duration-1-0.001-1.5,
-    \atk, 0.025,
-    \rel, 1,
-    \dur, Pseq([8], inf),
-    \amp, 16
-).play(~nT, quant: [4]);
 
-~buzzBass.stop;
-~buzzBass = Pbind(
-    \instrument, \sampler,
-    \buf, ~samples.at('buzzy-bass'),
-    \spos,0,
-    \susT, ~samples.at('buzzy-bass').duration-1-0.001,
-    \atk, 0.025,
-    \rate, 0.midiratio,
-    \rel, 1,
-    \dur, Pseq([Rest(4), 4], inf),
-    \amp, 3
-).play(~nT, quant: [4, -0.2]);
-)
 0.25 * 5.midiratio

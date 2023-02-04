@@ -1,6 +1,6 @@
 function setTabs() {
 
-ge.getTab("toms-acc-cb.scd").tick = function(s) {
+ge.getTab("drums.scd").tick = function(s) {
     let xp = 40;
     let yp = this.scroll.y * 9;
     let x = s * xp + 77;
