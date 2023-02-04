@@ -1,4 +1,6 @@
 
+s.record;
+
 (
 ~nT.sched(~nT.timeToNextBeat(quant: 4) - (~nT.beatDur * 0.5), {
     // ~x3b.set(\trigGate, 0, \gate, 0, \fadeTime, 10.1);
@@ -47,7 +49,7 @@ x = {
             timbre: [1, 1, 1, 1],
             morph: 0.75 - [0, 0.2, 0, -0.1],
             trigger: (trig!3)++(trig2!1) * [block0, block1, block1, block2] * trigGate * sto,
-            decay: [0.9, 0.6, 0.6, hh] * 0.5 + (1 - sto),
+            decay: [0.9, 0.6, 0.6, hh] * \dec.kr(0.125) + (1 - sto),
             lpg_colour: [0.75, 0.75, 0.75, 1],
             // fm_mod: -0.5,
             // timb_mod: 0.5
@@ -68,24 +70,24 @@ x = {
 });
 )
 
-~toms.set(\gli, 0.9);
+~toms.set(\gli, 0.5);
+~toms.set(\dec, 0.25)
+~toms.set(\pitch, -12)
 ~toms.set(\engine, 9);
+
+
 ~toms.set(\engine, 10);
 ~toms.set(\engine, 5);
 ~toms.set(\engine, 8);
 
 go samples
 go oubliette
+go tabs 494
 
 (
-// ~toOSC = NetAddr.new("127.0.0.1", 57121);    // create the NetAddr
 ~glitchListen.free;
 ~glitchListen = OSCdef(\listener, {|msg|
-        var data = msg[3..];
-    // var data = msg;
-    // data[0].postln;
-    // ~msg = ~msg[0] ++ ~msg[1] ++ data[0] ++ ~msg[3] ++ ~msg[4] ++ ~msg[5];
-    ~toOSC.sendMsg("/glitch", data[0]);
+    ~toOSC.sendMsg("/glitch", msg[3..][0]);
 }, '/glitchListener');
 )
 
@@ -117,13 +119,13 @@ go oubliette
         var rep = SendReply.kr(sta, '/glitchListener', 1 - sto, 1);
         var si = 1 - sto * 0.5;
         var sig = MiPlaits.ar(
-            pitch: 27 + [0, 12, 12, 24] + 12,
+            pitch: 27 + [0, 12, 12, 24] + \pitch.kr(12),
             engine: \engine.kr(5),
             harm: [0.25, 0.4, 0.4, 0.25],
             timbre: [1, 1, 1, 1],
             morph: 0.75 - [0, 0.2, 0, -0.1],
             trigger: (trig!3)++(trig2!1) * [block0, block1, block1, block2] * trigGate * sto,
-            decay: [0.9, 0.6, 0.6, hh] * 0.5 + (1 - sto),
+            decay: [0.9, 0.6, 0.6, hh] * \dec.kr(0.5) + (1 - sto),
             lpg_colour: [0.75, 0.75, 0.75, 1],
             // fm_mod: -0.5,
             // timb_mod: 0.5
@@ -139,7 +141,7 @@ go oubliette
         sig3 = VadimFilter.ar(sig3, scr.linlin(0, 1, 5000, 500) - 400, 0, 5) * 8;
         sig = sig + (sig3 * Demand.kr(trig!2, 0, Dwhite(0.00, 1.00, inf)).lag(1));
         sig = sig * 0.65 * 0.5 * dd.lag(0.025);
-        sig = ~v.(sig, 2000,0,5) * Line.kr(0, 1, 30);
+        sig = ~v.(sig, 2000,0,5) * Line.kr(0, 1, 60);
     }.play(fadeTime: 0.01).register;
 });
 )
