@@ -5,7 +5,7 @@ let gr;
 let mode = 0;
 let keysActive = true;
 let socket, cnvs, ctx, canvasDOM;
-let fileName = "/Volumes/Volumina/frames/grimoire/bouleaux-ora/bouleaux";
+let fileName = "/Volumes/Volumina/frames/dess-algo/aline-b/aline-b";
 let JSONs = [];
 let maxFrames = Infinity;
 let gl;
